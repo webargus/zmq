@@ -1,0 +1,9 @@
+LAYOUT(lazypiretclient_GUILayout, 478, 468)
+	ITEM(Label, lb1, SetLabel(t_("client id:")).LeftPosZ(31, 294).TopPosZ(16, 21))
+	ITEM(ArrayCtrl, msgs, AutoHideSb(true).VertGrid(false).HorzGrid(false).LeftPosZ(30, 414).TopPosZ(48, 173))
+	ITEM(EditString, inpMsg, LeftPosZ(30, 318).TopPosZ(231, 19))
+	ITEM(Button, send, SetLabel(t_("send")).LeftPosZ(359, 84).TopPosZ(231, 19))
+	ITEM(ArrayCtrl, report, Header(false).AutoHideSb(true).VertGrid(false).HorzGrid(false).LeftPosZ(30, 414).TopPosZ(264, 174))
+	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(200, 75).TopPosZ(444, 19))
+END_LAYOUT
+

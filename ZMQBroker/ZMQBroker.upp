@@ -1,0 +1,18 @@
+description "ZMQ Router Dealer broker\377";
+
+uses
+	CtrlLib;
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	ZMQBroker.h,
+	main.cpp,
+	ZMQBroker.lay,
+	ZMQQueueBroker.h,
+	ZMQQueueBroker.cpp;
+
+mainconfig
+	"" = "GUI MT";
+

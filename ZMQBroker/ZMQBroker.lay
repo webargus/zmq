@@ -1,0 +1,4 @@
+LAYOUT(ZMQBrokerLayout, 200, 100)
+	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(64, 72).TopPosZ(34, 32))
+END_LAYOUT
+

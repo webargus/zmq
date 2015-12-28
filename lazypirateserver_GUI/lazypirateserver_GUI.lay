@@ -1,0 +1,7 @@
+LAYOUT(lazypirateserver_GUILayout, 368, 323)
+	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(70, 56).TopPosZ(6, 15))
+	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(253, 56).TopPosZ(6, 15))
+	ITEM(ArrayCtrl, report, AutoHideSb(true).VertGrid(false).HorzGrid(false).LeftPosZ(31, 307).TopPosZ(29, 267))
+	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(156, 56).TopPosZ(303, 15))
+END_LAYOUT
+

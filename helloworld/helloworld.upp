@@ -1,0 +1,8 @@
+description "ZeroMQ simple Hello World server\377";
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	helloworld.cpp;
+

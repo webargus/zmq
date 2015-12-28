@@ -1,0 +1,18 @@
+description "lazy pirate zeroMQ client\377";
+
+uses
+	CtrlLib;
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	lazypiretclient_GUI.h,
+	main.cpp,
+	lazypiretclient_GUI.lay,
+	ZMQClient.h,
+	ZMQClient.cpp;
+
+mainconfig
+	"" = "GUI MT";
+
