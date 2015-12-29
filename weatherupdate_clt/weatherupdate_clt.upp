@@ -1,0 +1,11 @@
+description "weather update client - ZMQ PUB-SUB example\377";
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	weatherupdate_clt.cpp;
+
+mainconfig
+	"" = "";
+

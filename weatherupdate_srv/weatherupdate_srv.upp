@@ -1,0 +1,11 @@
+description "weather update server - ZMQ SUB-PUB example\377";
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	weatherupdate_srv.cpp;
+
+mainconfig
+	"" = "MT";
+
