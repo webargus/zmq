@@ -1,0 +1,18 @@
+description "ZMQ PUB test\377";
+
+uses
+	CtrlLib;
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	PubSubServer.h,
+	main.cpp,
+	PubSubServer.lay,
+	ZMQPubSubServer.h,
+	ZMQPubSubServer.cpp;
+
+mainconfig
+	"" = "GUI MT";
+

@@ -1,0 +1,4 @@
+#ifndef _PubSubClient_icpp_init_stub
+#define _PubSubClient_icpp_init_stub
+#include "CtrlLib/init"
+#endif
