@@ -9,6 +9,11 @@ using namespace Upp;
 #define LAYOUTFILE <PubSubServer/PubSubServer.lay>
 #include <CtrlCore/lay.h>
 
+struct autoModeMsg {
+	String		msg;
+	int			delay;
+};
+
 class PubSubServer : public ZMQPubSubServer, public WithPubSubServerLayout<TopWindow> {
 public:
 	typedef PubSubServer CLASSNAME;
@@ -16,7 +21,14 @@ public:
 	void BroadcastMessage();
 	
 	private:
-	static const String					sender;
+	void toggleAutoMode();
+	void runAutoMode();
+	void AutoBroadcastMessage(const autoModeMsg automsg);
+			
+	String								sender;
+	StatusBar							status;
+	InfoCtrl							srvid, cnt;
+	bool								inautomode;
 };
 
 #endif

@@ -1,7 +1,7 @@
-LAYOUT(PubSubServerLayout, 353, 219)
+LAYOUT(PubSubServerLayout, 353, 241)
 	ITEM(ArrayCtrl, history, VertGrid(false).HorzGrid(false).LeftPosZ(10, 331).TopPosZ(7, 155))
 	ITEM(EditString, msg, LeftPosZ(10, 331).TopPosZ(170, 19))
-	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(285, 56).TopPosZ(194, 21))
-	ITEM(Label, id, LeftPosZ(11, 210).TopPosZ(194, 21))
+	ITEM(Button, automode, SetLabel(t_("start automode")).LeftPosZ(23, 109).TopPosZ(194, 21))
+	ITEM(Button, clear, SetLabel(t_("clear history")).LeftPosZ(219, 109).TopPosZ(194, 21))
 END_LAYOUT
 

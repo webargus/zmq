@@ -17,6 +17,7 @@ class PubSubBroker : public ZMQPubSubBroker, public TopWindow
 	private:
 	Button			start, stop;
 	ArrayCtrl		report;
+	StatusBar		status;
 	
 	virtual void processTransitMessage(const String& msg);
 	void showTransitMessage(const String& msg);

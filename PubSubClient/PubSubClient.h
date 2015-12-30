@@ -19,6 +19,8 @@ public:
 	void addMessageToHistory(const String& msg);
 	void ClientStart();
 	void ClientStop();
+	
+	StatusBar					status;
 };
 
 #endif

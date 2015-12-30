@@ -2,7 +2,7 @@
 
 ZMQPubSubServer::ZMQPubSubServer() : context(1), publisher(context, ZMQ_PUB)
 {
-	publisher.connect("tcp://NOTEHOPE:5559");
+		publisher.connect("tcp://NOTEHOPE:5559");
 }
 
 void ZMQPubSubServer::sendMessage(const String& msg)

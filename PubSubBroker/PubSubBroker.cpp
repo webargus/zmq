@@ -3,14 +3,15 @@
 PubSubBroker::PubSubBroker()
 {
 	Title("ZMQ PUB/SUB Broker");
-	SetRect(0, 0, 360, 240);
-	Add(report.HSizePos(4, 4).VSizePos(34, 34));
+	SetRect(0, 0, 380, 260);
+	AddFrame(status);
+	Add(report.HSizePos(4, 4).VSizePos(34, 64));
 	report.AutoHideSb();
 	report.AddColumn("raw msg");
 	start.SetLabel("start");
 	stop.SetLabel("stop");
 	Add(start.HSizePos(40, 40).TopPos(10));
-	Add(stop.HSizePos(40, 40).BottomPos(10));
+	Add(stop.HSizePos(40, 40).BottomPos(30));
 	stop.Disable();
 	start <<= THISBACK(brokerStart);
 	stop  <<= THISBACK(brokerStop);
@@ -18,7 +19,6 @@ PubSubBroker::PubSubBroker()
 
 void PubSubBroker::brokerStart()
 {
-	report.Clear();
 	start.Disable();
 	stop.Enable();
 	startBroker();
@@ -38,7 +38,11 @@ void PubSubBroker::processTransitMessage(const String& msg)
 
 void PubSubBroker::showTransitMessage(const String& msg)
 {
-	report.Add(msg);
+	static int msgcnt = 0;
+	if((msgcnt % 500) == 0)
+		report.Clear();
+	status = Format("transit: %d", ++msgcnt);
+	report.Insert(0, Vector<Value>() << msg);
 }
 
 GUI_APP_MAIN

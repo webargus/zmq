@@ -1,4 +1,4 @@
-LAYOUT(PubSubClientLayout, 441, 242)
+LAYOUT(PubSubClientLayout, 441, 258)
 	ITEM(ArrayCtrl, history, VertGrid(false).HorzGrid(false).LeftPosZ(9, 425).TopPosZ(7, 199))
 	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(9, 56).TopPosZ(215, 19))
 	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(81, 56).TopPosZ(215, 19))
