@@ -2,32 +2,59 @@
 
 ZMQPubSubServer::ZMQPubSubServer() : context(1), publisher(context, ZMQ_PUB)
 {
-		publisher.connect("tcp://NOTEHOPE:5559");
+	
 }
 
 void ZMQPubSubServer::sendMessage(const String& msg)
 {
+	static bool socket_init = false;
+	if(!socket_init) {
+		publisher.connect("tcp://NOTEHOPE:5559");
+		socket_init = true;
+	}
 	Thread().Run(THISBACK1(publisherLoop, msg));
 }
 
-void ZMQPubSubServer::publisherLoop(const String& msg)
+void ZMQPubSubServer::publisherLoop(const String msg)
 {
 	/*
-		broker just does not work if we create a PUB socket within this thread loop;
-		PUB socket had to be declared as class member and initialized in constructor;
-		reason why? unknown; we just hope there'll be no thread-related issues,
+		broker simply does not work if we create a PUB socket within this thread loop;
+		reason why? unknown; I've tried everything, from checking the zmq_connect()
+		return value, through creating and deleting a new socket for each loop run,
+		to Sleep()ing between socket creation and sending msgs. Nothing worked;
+		zmq_connect() has always returned zero, but it does not mean an effective
+		connection has been established; it's somewhat useless, though :(
+		a true value for send(message) only means the message has been
+		delivered successfully to the zmq message queue, but it does not mean
+		that the message has been necessarily delivered to its destination;
+		we just hope there'll be no thread-related issues,
 		since zmq specs insist that sockets are not thread-safe;
 		anyway, if shit happens, we hopefully catch and dump it to log;
+		Current solution: PUB socket had to be declared as class member and
+		initialized later, when user sends his first message (see this->sendMessage),
+		otherwise a sys crash occurs.
 	*/
 	try
 	{
 	    //  Send message to broker
-	    zmq::message_t message(msg.ToStd().c_str(), msg.GetCount());
+	    zmq::message_t message(msg.Begin(), msg.GetCount());
 	    publisher.send(message);
 	}
 	catch (zmq::error_t ex)
 	{
-		DUMP(ex.what());
+		PostCallback(THISBACK1(processServerException, Format("%d - %s", errno, ex.what())));
 	}
 }
+
+void ZMQPubSubServer::processServerException(const String exc)
+{
+	DUMP(exc);
+}
+
+
+
+
+
+
+
 

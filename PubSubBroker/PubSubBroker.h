@@ -6,7 +6,10 @@
 
 using namespace Upp;
 
-class PubSubBroker : public ZMQPubSubBroker, public TopWindow
+#define LAYOUTFILE <PubSubBroker/PubSubBroker.lay>
+#include <CtrlCore/lay.h>
+
+class PubSubBroker : public ZMQPubSubBroker, public WithPubSubBrokerLayout<TopWindow>
 {
 	public:
 	typedef PubSubBroker CLASSNAME;
@@ -15,11 +18,11 @@ class PubSubBroker : public ZMQPubSubBroker, public TopWindow
 	void brokerStop();
 	
 	private:
-	Button			start, stop;
-	ArrayCtrl		report;
 	StatusBar		status;
 	
 	virtual void processTransitMessage(const String& msg);
+	virtual void processBrokerException(const String& exc);
+	void manageBrokerException(const String exc);
 	void showTransitMessage(const String& msg);
 };
 

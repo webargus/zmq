@@ -8,6 +8,7 @@ library
 	libzmq-v100-mt-4_0_4.lib;
 
 file
+	PubSubBroker.lay,
 	PubSubBroker.h,
 	PubSubBroker.cpp,
 	ZMQPubSubBroker.h,

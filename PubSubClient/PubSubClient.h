@@ -15,8 +15,10 @@ public:
 	PubSubClient();
 	
 	private:
-	virtual void processClientMessage(const String& msg);
-	void addMessageToHistory(const String& msg);
+	virtual void processClientMessage(const String msg);
+	virtual void processClientException(const String exc);
+	void manageClientException(const String exc);
+	void addMessageToHistory(const String msg);
 	void ClientStart();
 	void ClientStop();
 	

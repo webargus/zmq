@@ -1,7 +1,7 @@
 #ifndef _PubSubServer_ZMQPubSubServer_h_
 #define _PubSubServer_ZMQPubSubServer_h_
 
-#include <Core/Core.h>
+#include <CtrlLib/CtrlLib.h>
 #include "zmq.hpp"
 
 using namespace Upp;
@@ -14,9 +14,10 @@ class ZMQPubSubServer
 	
 	protected:
 	void sendMessage(const String& msg);
+	virtual void processServerException(const String exc);
 	
 	private:
-	void publisherLoop(const String& msg);
+	void publisherLoop(const String msg);
 	
 	zmq::context_t				context;
 	zmq::socket_t				publisher;

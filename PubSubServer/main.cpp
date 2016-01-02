@@ -21,38 +21,26 @@ void PubSubServer::toggleAutoMode()
 	status = "";
 	msg.Enable(!inautomode);
 	automode.SetLabel(inautomode ? "stop automode" : "start automode");
-	if(!inautomode)
+	if(!inautomode) {
+		KillTimeCallback();
 		return;
-	Thread().Run(THISBACK(runAutoMode));
+	}
+	SetTimeCallback(0, THISBACK(runAutoMode));
 }
 
 void PubSubServer::runAutoMode()
 {
-	while(inautomode) {
-		// generate a random integer for a message
-		int min = 10000;
-		int max = 99999;
-		autoModeMsg automsg;
-		automsg.msg = Format("auto-generated msg %d", int(Random(max - min) + min));
-		// generate a random delay time (ms) between msgs
-		min = 500;			// half a sec
-		max = 2000;			// 2 secs
-		automsg.delay = int(Random(max - min) + min);
-		// thread-safe send msg
-		PostCallback(THISBACK1(AutoBroadcastMessage, automsg));
-		// wait delay between msgs
-		while(inautomode && (automsg.delay > 0)) {
-			automsg.delay--;
-			Sleep(1);
-		}
-	}
-}
-
-void PubSubServer::AutoBroadcastMessage(const autoModeMsg automsg)
-{
-	msg = automsg.msg;
-	status = Format("waiting %d ms", automsg.delay);
+	// generate a random integer for a message
+	int min = 10000;
+	int max = 99999;
+	msg = Format("auto-generated msg %d", int(Random(max - min) + min));
+	// generate a random delay time (ms) between msgs
+	min = 500;			// half a sec
+	max = 2000;			// 2 secs
+	int delay = int(Random(max - min) + min);
+	status = Format("waiting %d ms", delay);
 	BroadcastMessage();
+	SetTimeCallback(delay, THISBACK(runAutoMode));
 }
 
 void PubSubServer::BroadcastMessage()

@@ -51,8 +51,6 @@ void ZMQPubSubBroker::brokerLoop()
 	            frontend.send(message);
 	        }
 	        
-	        Sleep(1);
-	        
 	        // receive messages from subscribers and forward them to publishers
 	        if (items [1].revents & ZMQ_POLLIN) {	        
 		        frontend.recv(&message);
@@ -63,7 +61,7 @@ void ZMQPubSubBroker::brokerLoop()
 	}
 	catch (zmq::error_t ex)
 	{
-		DUMP(ex.what());
+		processBrokerException(ex.what());
 	}
 }
 

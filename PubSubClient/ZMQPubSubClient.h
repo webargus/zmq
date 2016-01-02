@@ -15,7 +15,8 @@ class ZMQPubSubClient
 	void stopClient();
 	
 	protected:
-	virtual void processClientMessage(const String& msg) = 0;
+	virtual void processClientMessage(const String msg) = 0;
+	virtual void processClientException(const String exc) = 0;
 
 	private:
 	void clientLoop();

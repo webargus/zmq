@@ -1,7 +1,8 @@
-LAYOUT(PubSubClientLayout, 441, 258)
-	ITEM(ArrayCtrl, history, VertGrid(false).HorzGrid(false).LeftPosZ(9, 425).TopPosZ(7, 199))
-	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(9, 56).TopPosZ(215, 19))
-	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(81, 56).TopPosZ(215, 19))
-	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(377, 56).TopPosZ(215, 19))
+LAYOUT(PubSubClientLayout, 441, 322)
+	ITEM(ArrayCtrl, history, VertGrid(false).HorzGrid(false).LeftPosZ(9, 425).TopPosZ(7, 158))
+	ITEM(ArrayCtrl, errboard, VertGrid(false).HorzGrid(false).LeftPosZ(9, 425).TopPosZ(170, 100))
+	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(9, 56).TopPosZ(278, 19))
+	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(81, 56).TopPosZ(278, 19))
+	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(377, 56).TopPosZ(278, 19))
 END_LAYOUT
 

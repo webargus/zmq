@@ -44,7 +44,7 @@ void ZMQPubSubClient::clientLoop()
 	}
 	catch(zmq::error_t ex)
 	{
-		DUMP(ex.what());
+		processClientException(Format("%d - %s", errno, ex.what()));
 	}
 }
 

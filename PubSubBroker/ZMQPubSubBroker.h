@@ -16,6 +16,7 @@ class ZMQPubSubBroker
 	
 	protected:
 	virtual void processTransitMessage(const String& msg) = 0;
+	virtual void processBrokerException(const String& msg) = 0;
 		
 	private:
 	void brokerLoop();

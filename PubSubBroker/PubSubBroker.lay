@@ -1,0 +1,7 @@
+LAYOUT(PubSubBrokerLayout, 397, 281)
+	ITEM(ArrayCtrl, report, VertGrid(false).HorzGrid(false).LeftPosZ(7, 384).TopPosZ(4, 133))
+	ITEM(ArrayCtrl, errboard, VertGrid(false).HorzGrid(false).LeftPosZ(7, 384).TopPosZ(142, 81))
+	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(7, 69).TopPosZ(231, 22))
+	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(322, 69).TopPosZ(231, 22))
+END_LAYOUT
+

@@ -2,19 +2,29 @@
 
 PubSubBroker::PubSubBroker()
 {
-	Title("ZMQ PUB/SUB Broker");
-	SetRect(0, 0, 380, 260);
+	CtrlLayout(*this, "ZMQ PUB/SUB Broker");
 	AddFrame(status);
-	Add(report.HSizePos(4, 4).VSizePos(34, 64));
-	report.AutoHideSb();
 	report.AddColumn("raw msg");
-	start.SetLabel("start");
-	stop.SetLabel("stop");
-	Add(start.HSizePos(40, 40).TopPos(10));
-	Add(stop.HSizePos(40, 40).BottomPos(30));
-	stop.Disable();
+	errboard.AddColumn("fault report");
 	start <<= THISBACK(brokerStart);
 	stop  <<= THISBACK(brokerStop);
+}
+
+void PubSubBroker::processBrokerException(const String& exc)
+{
+	PostCallback(THISBACK1(manageBrokerException, exc));
+}
+
+void PubSubBroker::manageBrokerException(const String exc)
+{
+	stop.Disable();
+	stopBroker();		// lower 'running' flag
+	errboard.Add(exc);
+	errboard.Add("will restart broker...");
+	DUMP(exc);
+	Sleep(500);
+	brokerStart();
+	errboard.Add("...restarted client.");
 }
 
 void PubSubBroker::brokerStart()
