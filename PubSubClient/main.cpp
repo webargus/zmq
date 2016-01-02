@@ -13,6 +13,17 @@ PubSubClient::PubSubClient()
 	stop.Disable();
 }
 
+void PubSubClient::processClientWarning(const String msg)
+{
+	PostCallback(THISBACK1(manageClientWarning, msg));
+}
+
+void PubSubClient::manageClientWarning(const String msg)
+{
+	errboard.Insert(0);
+	errboard.Set(0, 0, msg);
+}
+
 void PubSubClient::processClientException(const String exc)
 {
 	PostCallback(THISBACK1(manageClientException, exc));
@@ -21,20 +32,19 @@ void PubSubClient::processClientException(const String exc)
 void PubSubClient::manageClientException(const String exc)
 {
 	static int cnt = 0;
-	if(cnt == 5) {
+	cnt++;
+	if(cnt == 2) {
 		if(PromptAbortRetry(Format("Couldn't recover from fault after %d attempts", cnt)))
 			Close();		// close window!
 		cnt = 0;
 	}
 	stop.Disable();
-	stopClient();		// lower 'running' flag
-	errboard.Add(exc);
-	errboard.Add(Format("will attempt to restart client in %d secs...", ++cnt));
+	errboard.Insert(0);
+	errboard.Set(0, 0, exc);
+	errboard.Insert(0);
+	errboard.Set(0, 0, "restarting client...");
 	DUMP(exc);
-	status = Format("waiting %d secs...", cnt);
-	Sleep(cnt*1000);	// wait cnt secs before retrying
 	ClientStart();
-	errboard.Add("...restarted client.");
 }
 
 void PubSubClient::ClientStart()
