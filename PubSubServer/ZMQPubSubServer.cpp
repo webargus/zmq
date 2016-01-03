@@ -9,7 +9,12 @@ void ZMQPubSubServer::sendMessage(const String& msg)
 {
 	static bool socket_init = false;
 	if(!socket_init) {
-		publisher.connect("tcp://NOTEHOPE:5559");
+		try {
+			publisher.connect("tcp://NOTEHOPE:5559");
+		} catch (zmq::error_t ex) {
+			processServerException(Format("%d - %s", errno, ex.what()));
+			return;
+		}
 		socket_init = true;
 	}
 	Thread().Run(THISBACK1(publisherLoop, msg));

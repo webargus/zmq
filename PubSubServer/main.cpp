@@ -15,6 +15,14 @@ PubSubServer::PubSubServer() : inautomode(false)
 	automode <<= THISBACK(toggleAutoMode);
 }
 
+void PubSubServer::processServerException(const String exc)
+{
+	// if exc in server loop, that's ok, no need to post callback,
+	// server loop already does it.
+	if(PromptAbortRetry(exc))
+		Close();		// close window!
+}
+
 void PubSubServer::toggleAutoMode()
 {
 	inautomode = inautomode ? false : true;

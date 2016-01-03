@@ -18,6 +18,7 @@ public:
 	private:
 	void toggleAutoMode();
 	void runAutoMode();
+	virtual void processServerException(const String exc);
 			
 	String								sender;
 	StatusBar							status;
