@@ -17,10 +17,19 @@ PubSubServer::PubSubServer() : inautomode(false)
 
 void PubSubServer::processServerException(const String exc)
 {
-	// if exc in server loop, that's ok, no need to post callback,
-	// server loop already does it.
-	if(PromptAbortRetry(exc))
-		Close();		// close window!
+	// if in automode, stop it
+	if(inautomode)
+		toggleAutoMode();
+	// exc took place in server thread, that's ok, no need to post callback,
+	// server loop already did it, we're running in main thread now.
+	if(PromptAbortRetry(exc)) {
+		// added callback here to correct for panic msgs on corrupted memory
+		// issued when aborting process.
+		PostCallback(callback(this, &TopWindow::Close));		// close window!
+		return;
+	}
+	// try to send msg again
+	BroadcastMessage();
 }
 
 void PubSubServer::toggleAutoMode()

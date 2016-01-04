@@ -11,6 +11,7 @@ class ZMQPubSubServer
 	public:
 	typedef ZMQPubSubServer CLASSNAME;
 	ZMQPubSubServer();
+	~ZMQPubSubServer();
 	
 	protected:
 	void sendMessage(const String& msg);
@@ -20,7 +21,7 @@ class ZMQPubSubServer
 	void publisherLoop(const String msg);
 	
 	zmq::context_t				context;
-	zmq::socket_t				publisher;
+	zmq::socket_t	*			publisher;
 };
 
 #endif
