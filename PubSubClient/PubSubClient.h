@@ -9,21 +9,21 @@ using namespace Upp;
 #define LAYOUTFILE <PubSubClient/PubSubClient.lay>
 #include <CtrlCore/lay.h>
 
-class PubSubClient : public ZMQPubSubClient, public WithPubSubClientLayout<TopWindow> {
+class PubSubClient : public WithPubSubClientLayout<TopWindow> {
 public:
 	typedef PubSubClient CLASSNAME;
 	PubSubClient();
+	//~PubSubClient() { PromptOK("parent destructor"); stopClient(); } // avoids pure virtual call crashes on window close
 	
 	private:
-	virtual void processClientMessage(const String msg);
-	virtual void processClientWarning(const String msg);
-	virtual void processClientException(const String exc);
-	void manageClientWarning(const String msg);
-	void manageClientException(const String exc);
-	void addMessageToHistory(const String msg);
+	void ManageClientMessage(const String msg);
+	void ManageClientWarning(const String msg);
+	void ManageClientException(const String exc);
 	void ClientStart();
 	void ClientStop();
+	void ClearGUI();
 	
+	ZMQPubSubClient				client;
 	StatusBar					status;
 };
 
