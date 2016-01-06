@@ -1,9 +1,12 @@
 #include "PubSubClient.h"
 
-PubSubClient::PubSubClient()
+PubSubClient::PubSubClient() : client("NOTEHOPE", "5560")
 {
 	CtrlLayout(*this, "ZMQ PUB/SUB Client");
 	AddFrame(status);
+	status.AddFrame(total.Right(120));
+	status = String("Server at 'tcp://").Cat()
+			 << client.getServerName() << ":" << client.getPort() << "'";
 	history.AddColumn("sender");
 	history.AddColumn("message");
 	errboard.AddColumn("fault report");
@@ -39,10 +42,21 @@ void PubSubClient::ManageClientException(const String exc)
 		}
 		cnt = 0;
 	}
-	ClientStop();
 	stop.Disable();
+	
+	// ping-ing server might help in restablishing connectivity to it,
+	// seen it while running home network tests
+	String resp;
+	errboard.Insert(0);
+	if(Sys(String("ping ").Cat() << client.getServerName(), resp) == -1)
+		resp = "no ping response";
+	errboard.Set(0, 0, resp);
+	
+	// add exception description to board
 	errboard.Insert(0);
 	errboard.Set(0, 0, exc);
+	
+	// restart client
 	errboard.Insert(0);
 	errboard.Set(0, 0, "restarting client...");
 	DUMP(exc);
@@ -56,7 +70,7 @@ void PubSubClient::ManageClientMessage(const String msg)
 		history.Clear();
 	Value js = ParseJSON(msg);
 	history.Insert(0, Vector<Value>() << js["sender"] << js["message"]);
-	status.Set(0, Format("count: %d", ++msgcnt), 40);
+	total.Set(Format("count: %d", ++msgcnt));
 }
 
 void PubSubClient::ClientStart()

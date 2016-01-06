@@ -25,6 +25,7 @@ public:
 	
 	ZMQPubSubClient				client;
 	StatusBar					status;
+	InfoCtrl					total;
 };
 
 #endif

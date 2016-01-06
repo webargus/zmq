@@ -4,7 +4,7 @@
 #include <CtrlLib/CtrlLib.h>
 #include "zmq.hpp"
 
-#define	REQUEST_TIMEOUT	1500		// depends on network latency
+#define	REQUEST_TIMEOUT	6000		// depends on network latency
 #define	REQUEST_RETRIES 3
 
 using namespace Upp;
@@ -13,10 +13,12 @@ class ZMQPubSubClient
 {
 	public:
 	typedef ZMQPubSubClient CLASSNAME;
-	ZMQPubSubClient();
+	ZMQPubSubClient(const String& srv, const String& p);
 	~ZMQPubSubClient() { stopClient(); }
 	void startClient();
 	void stopClient();
+	const String& getServerName() { return server; }
+	const String& getPort() { return port; }
 
 	Callback1<String>					WhenMessage, WhenException, WhenWarning;
 
@@ -28,6 +30,7 @@ class ZMQPubSubClient
 	
 	Thread							worker;
 	zmq::context_t					context;
+	String							server, port;
 	bool							running;
 };
 

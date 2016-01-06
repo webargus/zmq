@@ -1,6 +1,7 @@
 #include "ZMQPubSubClient.h"
 
-ZMQPubSubClient::ZMQPubSubClient() : context(1), running(false)
+ZMQPubSubClient::ZMQPubSubClient(const String& srv, const String& p)
+	: server(srv), port(p), context(1), running(false)
 {
 }
 
@@ -27,14 +28,21 @@ void ZMQPubSubClient::clientLoop()
 	try
 	{
     	subscriber = new zmq::socket_t(context, ZMQ_SUB);
-    	subscriber->connect("tcp://NOTEHOPE:5560");
+    	
+		/* MANUAL's ii:
+		Caution: All options, with the exception of 
+		ZMQ_SUBSCRIBE, ZMQ_UNSUBSCRIBE, ZMQ_LINGER, ZMQ_ROUTER_MANDATORY and
+		ZMQ_XPUB_VERBOSE only take effect for subsequent socket bind/connects.*/
+		
+	    int rcvbuf = 16384;		// 16K
+	    subscriber->setsockopt(ZMQ_RCVBUF, &rcvbuf, sizeof rcvbuf);
+ 
+	   	subscriber->connect((String("tcp://").Cat() << server << ":" << port).Begin());
 
 	    //  zero length filter string subscribes to all publishers
 	    const char *filter = "";
 	    subscriber->setsockopt(ZMQ_SUBSCRIBE, filter, strlen (filter));
 	    
-	    int rcvbuf = 32768;
-	    subscriber->setsockopt(ZMQ_RCVBUF, &rcvbuf, sizeof rcvbuf);
 	}
 	catch(zmq::error_t ex)
 	{
@@ -93,13 +101,19 @@ void ZMQPubSubClient::clientLoop()
 		}
 		catch(zmq::error_t ex)
 		{
-			PostCallback(THISBACK1(processClientException, Format("%d - %s", errno, ex.what())));
 			running = false;
+			subscriber->close();
+			delete subscriber;
+			PostCallback(THISBACK1(processClientException, Format("%d - %s", errno, ex.what())));
+			return;
 		}
 		catch(String& ex)
 		{
-			PostCallback(THISBACK1(processClientException, ex));
+			subscriber->close();
+			delete subscriber;
 			running = false;
+			PostCallback(THISBACK1(processClientException, ex));
+			return;
 		}
 	}
 	subscriber->close();
