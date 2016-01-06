@@ -11,17 +11,16 @@ class ZMQPubSubServer
 	public:
 	typedef ZMQPubSubServer CLASSNAME;
 	ZMQPubSubServer();
-	~ZMQPubSubServer();
 	
 	protected:
-	void sendMessage(const String& msg);
+	void sendMessage(const String msg);
 	virtual void processServerException(const String exc);
 	
 	private:
-	void publisherLoop(const String msg);
+	void publisherLoop();
 	
 	zmq::context_t				context;
-	zmq::socket_t	*			publisher;
+	bool						running;
 };
 
 #endif

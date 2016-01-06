@@ -4,7 +4,7 @@
 #include <CtrlLib/CtrlLib.h>
 #include "zmq.hpp"
 
-#define	REQUEST_TIMEOUT	4000		// depends on network latency
+#define	REQUEST_TIMEOUT	1500		// depends on network latency
 #define	REQUEST_RETRIES 3
 
 using namespace Upp;

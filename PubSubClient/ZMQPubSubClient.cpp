@@ -32,9 +32,9 @@ void ZMQPubSubClient::clientLoop()
 	    //  zero length filter string subscribes to all publishers
 	    const char *filter = "";
 	    subscriber->setsockopt(ZMQ_SUBSCRIBE, filter, strlen (filter));
-	    //  Configure socket to not wait at close time
-	    /*int linger = 0;
-	    subscriber->setsockopt(ZMQ_LINGER, &linger, sizeof (linger));*/
+	    
+	    int rcvbuf = 32768;
+	    subscriber->setsockopt(ZMQ_RCVBUF, &rcvbuf, sizeof rcvbuf);
 	}
 	catch(zmq::error_t ex)
 	{
@@ -57,14 +57,18 @@ void ZMQPubSubClient::clientLoop()
 			zmq::poll (&items [0],
 					   1,					// no. of zmq::pollitem_t structures in items array
 					   REQUEST_TIMEOUT);	// timeout in millisecs; 0 => return immediately
+			
+			// check if running again in case control app stopped client while polling
 			if(!running)
 				break;
+			
 			if(items[0].revents & ZMQ_POLLIN) {
 				// we got some incoming msg, so fetch and process it
 				subscriber->recv(&msg, 0);
 				PostCallback(THISBACK1(processClientMessage,
 							 String(static_cast<char*>(msg.data()), msg.size())));
 				retries = REQUEST_RETRIES;
+				// warn control app we're in business, in case we reconnected or just connected
 				if(expecting_msg) {
 					PostCallback(THISBACK1(processClientWarning, "client connected"));
 					expecting_msg = false;
@@ -72,11 +76,14 @@ void ZMQPubSubClient::clientLoop()
 				continue;
 			}
 			
+			// no msg polled, so let's try again
 			expecting_msg = true;
 			
+			// max retries reached, abort
 			if(--retries == 0)
 				throw(String("server unreacheable, aborted"));
 			
+			// warn control app we're about to try polling msgs again
 			PostCallback(THISBACK1(processClientWarning,
 								  Format("got no msg from server since %d secs ago",
 										 int(REQUEST_TIMEOUT/1000))));

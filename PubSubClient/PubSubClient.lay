@@ -4,5 +4,6 @@ LAYOUT(PubSubClientLayout, 441, 322)
 	ITEM(Button, start, SetLabel(t_("start")).LeftPosZ(9, 56).TopPosZ(278, 19))
 	ITEM(Button, stop, SetLabel(t_("stop")).LeftPosZ(81, 56).TopPosZ(278, 19))
 	ITEM(Button, clear, SetLabel(t_("clear")).LeftPosZ(377, 56).TopPosZ(278, 19))
+	ITEM(Label, l1, SetLabel(t_("(c) Edson - 2015/2016 ")).LeftPosZ(167, 177).TopPosZ(276, 21))
 END_LAYOUT
 
