@@ -1,57 +1,63 @@
 #include "PubSubBroker.h"
 
-PubSubBroker::PubSubBroker()
+PubSubBroker::PubSubBroker() : broker("5559", "5560")
 {
 	CtrlLayout(*this, "ZMQ PUB/SUB Broker");
 	AddFrame(status);
+	status.AddFrame(total.Right(160));
+	status = String("frontend port: ").Cat() << broker.getServerPort() <<
+			 "; backend port: " << broker.getClientPort();
 	report.AddColumn("raw msg");
 	errboard.AddColumn("fault report");
 	start <<= THISBACK(brokerStart);
 	stop  <<= THISBACK(brokerStop);
-}
-
-void PubSubBroker::processBrokerException(const String& exc)
-{
-	PostCallback(THISBACK1(manageBrokerException, exc));
+	broker.WhenBrokerException = THISBACK(manageBrokerException);
+	broker.WhenTransitMessage  = THISBACK(showTransitMessage);
 }
 
 void PubSubBroker::manageBrokerException(const String exc)
 {
+	static int cnt = BROKER_EXC_RETRIES;
+
 	stop.Disable();
-	stopBroker();		// lower 'running' flag
 	errboard.Add(exc);
+	if(cnt-- == 0) {
+		if(PromptAbortRetry(Format("Couldn't recover from fault after %d attempts",
+								   BROKER_EXC_RETRIES))) {
+			PostCallback(callback(this, &TopWindow::Close));		// close window!
+			return;
+		}
+		cnt = BROKER_EXC_RETRIES;
+		errboard.Clear();
+	}
+	
 	errboard.Add("will restart broker...");
 	DUMP(exc);
 	Sleep(500);
 	brokerStart();
-	errboard.Add("...restarted client.");
+	errboard.Add("...restarted broker.");
 }
 
 void PubSubBroker::brokerStart()
 {
 	start.Disable();
 	stop.Enable();
-	startBroker();
+	broker.startBroker();
 }
 
 void PubSubBroker::brokerStop()
 {
 	start.Enable();
 	stop.Disable();
-	stopBroker();
+	broker.stopBroker();
 }
 
-void PubSubBroker::processTransitMessage(const String& msg)
-{
-	PostCallback(THISBACK1(showTransitMessage, msg));
-}
-
-void PubSubBroker::showTransitMessage(const String& msg)
+void PubSubBroker::showTransitMessage(const String msg)
 {
 	static int msgcnt = 0;
 	if((msgcnt % 500) == 0)
 		report.Clear();
-	status = Format("transit: %d", ++msgcnt);
+	total = Format("transit: %d", ++msgcnt);
 	report.Insert(0, Vector<Value>() << msg);
 }
 

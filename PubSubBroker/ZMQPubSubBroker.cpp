@@ -1,6 +1,7 @@
 #include "ZMQPubSubBroker.h"
 
-ZMQPubSubBroker::ZMQPubSubBroker() : context(1), running(false)
+ZMQPubSubBroker::ZMQPubSubBroker(const String& srvport, const String& cltport)
+	: srvport(srvport), cltport(cltport), context(1), running(false)
 {
 }
 
@@ -29,8 +30,8 @@ void ZMQPubSubBroker::brokerLoop()
 		// frontend socket faces subscribers (SUB), i.e., XPUB publishes to SUBs
 		zmq::socket_t frontend (context, ZMQ_XPUB);
 
-		backend.bind("tcp://*:5559");
-		frontend.bind("tcp://*:5560");
+		backend.bind((String("tcp://*:").Cat() << srvport).Begin());			// 5559
+		frontend.bind((String("tcp://*:").Cat() << cltport).Begin());			// 5560
 
 	    //  Initialize poll set
 	    zmq::pollitem_t items [] = {
@@ -47,22 +48,37 @@ void ZMQPubSubBroker::brokerLoop()
 	        // receive msgs from publishers and forward them to subscribers
 	        if (items [0].revents & ZMQ_POLLIN) {   
 	            backend.recv(&message);
-	            processTransitMessage("backend#"+String((char*)message.data(), message.size()));
+	            PostCallback(THISBACK1(processTransitMessage,
+	            			 String("backend#").Cat() <<
+	            			 String(static_cast<char*>(message.data()), message.size())));
 	            frontend.send(message);
 	        }
 	        
 	        // receive messages from subscribers and forward them to publishers
 	        if (items [1].revents & ZMQ_POLLIN) {	        
 		        frontend.recv(&message);
-	            processTransitMessage("frontend#"+String((char*)message.data(), message.size()));
+	            PostCallback(THISBACK1(processTransitMessage,
+	            			 String("frontend#").Cat() <<
+	            			 String(static_cast<char*>(message.data()), message.size())));
 		        backend.send(message);
 	        }
 	    }
 	}
 	catch (zmq::error_t ex)
 	{
-		processBrokerException(ex.what());
+		running = false;
+		PostCallback(THISBACK1(processBrokerException, ex.what()));
 	}
+}
+
+void ZMQPubSubBroker::processTransitMessage(const String msg)
+{
+	WhenTransitMessage(msg);
+}
+
+void ZMQPubSubBroker::processBrokerException(const String msg)
+{
+	WhenBrokerException(msg);
 }
 
 

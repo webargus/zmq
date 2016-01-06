@@ -4,12 +4,14 @@
 #include <CtrlLib/CtrlLib.h>
 #include "ZMQPubSubBroker.h"
 
+#define	BROKER_EXC_RETRIES	3
+
 using namespace Upp;
 
 #define LAYOUTFILE <PubSubBroker/PubSubBroker.lay>
 #include <CtrlCore/lay.h>
 
-class PubSubBroker : public ZMQPubSubBroker, public WithPubSubBrokerLayout<TopWindow>
+class PubSubBroker : public WithPubSubBrokerLayout<TopWindow>
 {
 	public:
 	typedef PubSubBroker CLASSNAME;
@@ -18,12 +20,12 @@ class PubSubBroker : public ZMQPubSubBroker, public WithPubSubBrokerLayout<TopWi
 	void brokerStop();
 	
 	private:
-	StatusBar		status;
+	ZMQPubSubBroker		broker;
+	StatusBar			status;
+	InfoCtrl			total;
 	
-	virtual void processTransitMessage(const String& msg);
-	virtual void processBrokerException(const String& exc);
 	void manageBrokerException(const String exc);
-	void showTransitMessage(const String& msg);
+	void showTransitMessage(const String msg);
 };
 
 #endif
