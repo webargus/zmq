@@ -1,8 +1,23 @@
 #include "ZMQPubSubBroker.h"
 
+ZMQPubSubBroker::ZMQPubSubBroker()
+	: srvport("5559"), cltport("5560"), context(1), running(false)
+{
+}
+
 ZMQPubSubBroker::ZMQPubSubBroker(const String& srvport, const String& cltport)
 	: srvport(srvport), cltport(cltport), context(1), running(false)
 {
+}
+
+void ZMQPubSubBroker::setBrokerPorts(const String& sp, const String& cp)
+{
+	srvport = sp;
+	cltport = cp;
+	if(running) {
+		stopBroker();
+		startBroker();
+	}
 }
 
 void ZMQPubSubBroker::startBroker()

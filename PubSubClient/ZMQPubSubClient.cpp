@@ -1,8 +1,31 @@
 #include "ZMQPubSubClient.h"
 
+ZMQPubSubClient::ZMQPubSubClient()
+	: server("localhost"), port("5560"), context(1), running(false)
+{
+}
+
 ZMQPubSubClient::ZMQPubSubClient(const String& srv, const String& p)
 	: server(srv), port(p), context(1), running(false)
 {
+}
+
+void ZMQPubSubClient::setServerName(const String& srv)
+{
+	server = srv;
+	if(running) {
+		stopClient();
+		startClient();
+	}
+}
+
+void ZMQPubSubClient::setPort(const String& p)
+{
+	port = p;
+	if(running) {
+		stopClient();
+		startClient();
+	}
 }
 
 void ZMQPubSubClient::startClient()

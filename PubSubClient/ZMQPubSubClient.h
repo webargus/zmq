@@ -13,10 +13,13 @@ class ZMQPubSubClient
 {
 	public:
 	typedef ZMQPubSubClient CLASSNAME;
+	ZMQPubSubClient();
 	ZMQPubSubClient(const String& srv, const String& p);
 	~ZMQPubSubClient() { stopClient(); }
 	void startClient();
 	void stopClient();
+	void setServerName(const String& srv);
+	void setPort(const String& p);
 	const String& getServerName() { return server; }
 	const String& getPort() { return port; }
 

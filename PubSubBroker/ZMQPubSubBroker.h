@@ -10,9 +10,11 @@ class ZMQPubSubBroker
 {
 	public:
 	typedef ZMQPubSubBroker CLASSNAME;
+	ZMQPubSubBroker();
 	ZMQPubSubBroker(const String& srvport, const String& cltport);
 	void startBroker();
 	void stopBroker();
+	void setBrokerPorts(const String& sp, const String& cp);
 	const String& getServerPort() { return srvport; }
 	const String& getClientPort() { return cltport; }
 	
