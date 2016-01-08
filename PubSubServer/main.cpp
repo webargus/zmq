@@ -1,6 +1,6 @@
 #include "PubSubServer.h"
 
-PubSubServer::PubSubServer() : inautomode(false)
+PubSubServer::PubSubServer() : inautomode(false), server("NOTEHOPE", "5559")
 {
 	CtrlLayout(*this, "ZMQ PUB/SUB Broadcast Server");
 	sender = GetComputerName().Cat() << Format(":%d", getpid());
@@ -13,6 +13,7 @@ PubSubServer::PubSubServer() : inautomode(false)
 	clear <<= callback(&history, &ArrayCtrl::Clear);
 	msg.WhenEnter = THISBACK(BroadcastMessage);
 	automode <<= THISBACK(toggleAutoMode);
+	server.WhenException = THISBACK(processServerException);
 }
 
 void PubSubServer::processServerException(const String exc)
@@ -20,7 +21,7 @@ void PubSubServer::processServerException(const String exc)
 	// if in automode, stop it
 	if(inautomode)
 		toggleAutoMode();
-	// exc took place in server thread, that's ok, no need to post callback,
+	// although exc took place in server thread, that's ok, no need to post callback,
 	// server loop already did it, we're running in main thread now.
 	if(PromptAbortRetry(exc)) {
 		// added callback here to correct for panic msgs on corrupted memory
@@ -70,7 +71,7 @@ void PubSubServer::BroadcastMessage()
 	history.Insert(0, Vector<Value>() << ~msg);
 	Json json;
 	json("sender", sender)("message", (~msg).ToString());
-	sendMessage(json.ToString());
+	server.sendMessage(json.ToString());
 }
 
 GUI_APP_MAIN

@@ -11,15 +11,23 @@ class ZMQPubSubServer
 	public:
 	typedef ZMQPubSubServer CLASSNAME;
 	ZMQPubSubServer();
-	
-	protected:
+	ZMQPubSubServer(const String& srv, const String& sp, const String& lp = "5555");
 	void sendMessage(const String msg);
-	virtual void processServerException(const String exc);
+	void stopServer();
+	void processServerException(const String exc);
+	void setServerParams(const String& srv, const String& sp);
+	void setLocalPort(const String& lp) { lclport = lp; }
+	const String& getServerPort() { return srvport; }
+	const String& getLocalPort()  { return lclport; }
+	const String& getServerName() { return server; }
 	
+	Callback1<String>			WhenException;
 	private:
 	void publisherLoop();
 	
+	String						srvport, lclport, server;
 	zmq::context_t				context;
+	Thread						worker;
 	bool						running;
 };
 

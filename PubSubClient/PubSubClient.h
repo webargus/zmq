@@ -13,7 +13,6 @@ class PubSubClient : public WithPubSubClientLayout<TopWindow> {
 public:
 	typedef PubSubClient CLASSNAME;
 	PubSubClient();
-	//~PubSubClient() { PromptOK("parent destructor"); stopClient(); } // avoids pure virtual call crashes on window close
 	
 	private:
 	void ManageClientMessage(const String msg);

@@ -9,7 +9,7 @@ using namespace Upp;
 #define LAYOUTFILE <PubSubServer/PubSubServer.lay>
 #include <CtrlCore/lay.h>
 
-class PubSubServer : public ZMQPubSubServer, public WithPubSubServerLayout<TopWindow> {
+class PubSubServer : public WithPubSubServerLayout<TopWindow> {
 public:
 	typedef PubSubServer CLASSNAME;
 	PubSubServer();
@@ -18,8 +18,9 @@ public:
 	private:
 	void toggleAutoMode();
 	void runAutoMode();
-	virtual void processServerException(const String exc);
-			
+	void processServerException(const String exc);
+	
+	ZMQPubSubServer						server;
 	String								sender;
 	StatusBar							status;
 	InfoCtrl							srvid, cnt;
