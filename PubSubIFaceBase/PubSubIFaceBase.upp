@@ -1,0 +1,14 @@
+description "basic PubSub interface\377";
+
+uses
+	Core,
+	PubSubBroker,
+	PubSubClient;
+
+file
+	PubSubIFaceBase.cpp,
+	PubSubIFaceBase.h;
+
+mainconfig
+	"" = "MT";
+

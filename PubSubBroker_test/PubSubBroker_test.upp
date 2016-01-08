@@ -1,0 +1,18 @@
+description "ZMQ PUB SUB Broker test\377";
+
+uses
+	Core,
+	CtrlLib,
+	PubSubBroker;
+
+library
+	libzmq-v100-mt-4_0_4.lib;
+
+file
+	PubSubBroker.h,
+	PubSubBroker.cpp,
+	PubSubBroker.lay;
+
+mainconfig
+	"" = "GUI MT SSE2";
+

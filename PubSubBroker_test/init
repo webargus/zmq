@@ -1,0 +1,6 @@
+#ifndef _PubSubBroker_test_icpp_init_stub
+#define _PubSubBroker_test_icpp_init_stub
+#include "Core/init"
+#include "CtrlLib/init"
+#include "PubSubBroker/init"
+#endif

@@ -2,13 +2,13 @@
 #define _PubSubBroker_PubSubBroker_h
 
 #include <CtrlLib/CtrlLib.h>
-#include "ZMQPubSubBroker.h"
+#include <PubSubBroker/ZMQPubSubBroker.h>
 
 #define	BROKER_EXC_RETRIES	3
 
 using namespace Upp;
 
-#define LAYOUTFILE <PubSubBroker/PubSubBroker.lay>
+#define LAYOUTFILE <PubSubBroker_test/PubSubBroker.lay>
 #include <CtrlCore/lay.h>
 
 class PubSubBroker : public WithPubSubBrokerLayout<TopWindow>

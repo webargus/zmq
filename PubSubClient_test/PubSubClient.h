@@ -2,11 +2,11 @@
 #define _PubSubClient_PubSubClient_h
 
 #include <CtrlLib/CtrlLib.h>
-#include "ZMQPubSubClient.h"
+#include <PubSubClient/ZMQPubSubClient.h>
 
 using namespace Upp;
 
-#define LAYOUTFILE <PubSubClient/PubSubClient.lay>
+#define LAYOUTFILE <PubSubClient_test/PubSubClient.lay>
 #include <CtrlCore/lay.h>
 
 class PubSubClient : public WithPubSubClientLayout<TopWindow> {

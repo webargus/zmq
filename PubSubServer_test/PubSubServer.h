@@ -2,11 +2,11 @@
 #define _PubSubServer_PubSubServer_h
 
 #include <CtrlLib/CtrlLib.h>
-#include "ZMQPubSubServer.h"
+#include <PubSubServer/ZMQPubSubServer.h>
 
 using namespace Upp;
 
-#define LAYOUTFILE <PubSubServer/PubSubServer.lay>
+#define LAYOUTFILE <PubSubServer_test/PubSubServer.lay>
 #include <CtrlCore/lay.h>
 
 class PubSubServer : public WithPubSubServerLayout<TopWindow> {
