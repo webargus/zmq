@@ -3,5 +3,4 @@
 #include "Core/init"
 #include "PubSubBroker/init"
 #include "PubSubClient/init"
-#include "PubSubServer/init"
 #endif

@@ -3,6 +3,9 @@ description "ZMQ PUB SUB Broker\377";
 uses
 	Core;
 
+library
+	libzmq-v100-mt-4_0_4.lib;
+
 file
 	ZMQPubSubBroker.cpp,
 	ZMQPubSubBroker.h;

@@ -27,13 +27,14 @@ class PubSubIFaceBase {
 	protected:
 	PubSubIFaceBase();
 	static void Broadcast(TCPMessage& msg);
-	virtual void ReceiveMessage(const String& msg) { }
-	virtual const String getTCPMsgStatement(const int id);
+	virtual void ReceiveMessage(const String msg) { }
 	
 	static ZMQPubSubBroker		broker;
 	static ZMQPubSubServer		server;
 	static ZMQPubSubClient		client;
 
+	public:
+	static const String getTCPMsgStatement(const int id);
 	enum TCPMsg_Issuer			{ SERVER = 1000 };
 	enum TCPMsg_Statement		{ SERVER_KEEP_ALIVE = 1010, SERVER_SHUTDOWN };
 };

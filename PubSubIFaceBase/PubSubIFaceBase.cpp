@@ -21,8 +21,13 @@ TCPMessage::operator String ()
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+ZMQPubSubBroker PubSubIFaceBase::broker = ZMQPubSubBroker();
+ZMQPubSubServer PubSubIFaceBase::server = ZMQPubSubServer();
+ZMQPubSubClient PubSubIFaceBase::client = ZMQPubSubClient();
+
 PubSubIFaceBase::PubSubIFaceBase()
 {
+	client.WhenMessage = THISBACK(ReceiveMessage);
 }
 
 void PubSubIFaceBase::Broadcast(TCPMessage& msg)

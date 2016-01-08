@@ -5,9 +5,6 @@ uses
 	CtrlLib,
 	PubSubBroker;
 
-library
-	libzmq-v100-mt-4_0_4.lib;
-
 file
 	PubSubBroker.h,
 	PubSubBroker.cpp,
