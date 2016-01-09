@@ -27,7 +27,7 @@ ZMQPubSubClient PubSubIFaceBase::client = ZMQPubSubClient();
 
 PubSubIFaceBase::PubSubIFaceBase()
 {
-	client.WhenMessage = THISBACK(ReceiveMessage);
+	client.WhenMessage   = THISBACK(ReceiveMessage);
 }
 
 void PubSubIFaceBase::Broadcast(TCPMessage& msg)
