@@ -1,7 +1,7 @@
 #include "PubSubIFaceBase.h"
 
-ZMQPubSubBroker PubSubIFaceBase::broker = ZMQPubSubBroker();
-ZMQPubSubClient PubSubIFaceBase::client = ZMQPubSubClient();
+ZMQPubSubBroker PubSubIFaceBase::broker;
+ZMQPubSubClient PubSubIFaceBase::client;
 
 PubSubIFaceBase::PubSubIFaceBase()
 {
@@ -11,12 +11,12 @@ PubSubIFaceBase::PubSubIFaceBase()
 	client.WhenMessage   = THISBACK(ReceiveMessage);
 }
 
-PubSubIFaceBase::~PubSubIFaceBase()
+/*PubSubIFaceBase::~PubSubIFaceBase()
 {
 	client.stopClient();
 	broker.stopBroker();
 }
-
+*/
 
 
 

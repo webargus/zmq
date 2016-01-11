@@ -4,15 +4,13 @@
 #include <Core/Core.h>
 #include <PubSubBroker/ZMQPubSubBroker.h>
 #include <PubSubClient/ZMQPubSubClient.h>
-#include "TCPMessage.h"
 
 class PubSubIFaceBase {
 	public:
 	typedef PubSubIFaceBase CLASSNAME;
 	
 	PubSubIFaceBase();
-	~PubSubIFaceBase();
-	static void Broadcast(TCPMessage& msg);
+	//~PubSubIFaceBase();
 	virtual void ReceiveMessage(const String msg) { }
 	
 	static ZMQPubSubBroker		broker;
