@@ -7,7 +7,9 @@ uses
 
 file
 	PubSubIFaceBase.cpp,
-	PubSubIFaceBase.h;
+	PubSubIFaceBase.h,
+	TCPMessage.cpp,
+	TCPMessage.h;
 
 mainconfig
 	"" = "MT";

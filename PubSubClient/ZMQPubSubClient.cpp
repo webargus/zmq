@@ -101,7 +101,7 @@ void ZMQPubSubClient::clientLoop()
 				retries = REQUEST_RETRIES;
 				// warn control app we're in business, in case we reconnected or just connected
 				if(expecting_msg) {
-					PostCallback(THISBACK1(processClientWarning, "client connected"));
+					PostCallback(THISBACK1(processClientWarning, "cliente conectado"));
 					expecting_msg = false;
 				}
 				continue;
@@ -112,14 +112,14 @@ void ZMQPubSubClient::clientLoop()
 			
 			// max retries reached, abort
 			if(--retries == 0)
-				throw(String("server unreacheable, aborted"));
+				throw(String("servidor não responde, abortando procedimento."));
 			
 			// warn control app we're about to try polling msgs again
 			PostCallback(THISBACK1(processClientWarning,
-								  Format("got no msg from server since %d secs ago",
-										 int(REQUEST_TIMEOUT/1000))));
+						 Format("passados %d`s, nenhuma notificação recebida do servidor",
+								int(REQUEST_TIMEOUT/1000))));
 			PostCallback(THISBACK1(processClientWarning,
-								  Format("%d. listening to server for another %d secs...",
+								  Format("%d. esperando mais %d`s...",
 										 REQUEST_RETRIES-retries, int(REQUEST_TIMEOUT/1000))));
 		}
 		catch(zmq::error_t ex)
