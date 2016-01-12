@@ -2,4 +2,5 @@
 #define _PubSubClient_icpp_init_stub
 #include "Core/init"
 #include "PubSubServer/init"
+#include "TCPMessage/init"
 #endif

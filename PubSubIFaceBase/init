@@ -1,6 +1,0 @@
-#ifndef _PubSubIFaceBase_icpp_init_stub
-#define _PubSubIFaceBase_icpp_init_stub
-#include "Core/init"
-#include "PubSubBroker/init"
-#include "PubSubClient/init"
-#endif

@@ -47,6 +47,8 @@ void ZMQPubSubClient::stopClient()
 
 void ZMQPubSubClient::clientLoop()
 {
+	TCPMessage tcp_msg;
+	tcp_msg.issuerId = TCPMessage::CLIENT;
 	zmq::socket_t * subscriber;
 	try
 	{
@@ -72,8 +74,9 @@ void ZMQPubSubClient::clientLoop()
 		running = false;
 		subscriber->close();
 		delete subscriber;
-		PostCallback(THISBACK1(processClientException,
-							   Format("subscriber connect; %d - %s", errno, ex.what())));
+		tcp_msg.statement = TCPMessage::CLIENT_CONNECT_ERROR;
+		tcp_msg.content = Format("%d - %s", errno, ex.what());
+		PostCallback(THISBACK1(processClientException, tcp_msg));
 		return;
 	}
 
@@ -99,9 +102,12 @@ void ZMQPubSubClient::clientLoop()
 				PostCallback(THISBACK1(processClientMessage,
 							 String(static_cast<char*>(msg.data()), msg.size())));
 				retries = REQUEST_RETRIES;
-				// warn control app we're in business, in case we reconnected or just connected
+				// warn control app we're in business, 
+				//in case we reconnected or just connected
 				if(expecting_msg) {
-					PostCallback(THISBACK1(processClientWarning, "cliente conectado"));
+					tcp_msg.statement = TCPMessage::CLIENT_CONNECT_OK;
+					tcp_msg.content = "client connected";
+					PostCallback(THISBACK1(processClientWarning, tcp_msg));
 					expecting_msg = false;
 				}
 				continue;
@@ -115,19 +121,19 @@ void ZMQPubSubClient::clientLoop()
 				throw(String("servidor não responde, abortando procedimento."));
 			
 			// warn control app we're about to try polling msgs again
-			PostCallback(THISBACK1(processClientWarning,
-						 Format("passados %d`s, nenhuma notificação recebida do servidor",
-								int(REQUEST_TIMEOUT/1000))));
-			PostCallback(THISBACK1(processClientWarning,
-								  Format("%d. esperando mais %d`s...",
-										 REQUEST_RETRIES-retries, int(REQUEST_TIMEOUT/1000))));
+			tcp_msg.statement = TCPMessage::CLIENT_RECV_RETRY;
+			tcp_msg.itemId = REQUEST_TIMEOUT; // pass timeout in msg itemId
+			tcp_msg.content = "polling again";
+			PostCallback(THISBACK1(processClientWarning, tcp_msg));
 		}
 		catch(zmq::error_t ex)
 		{
 			running = false;
 			subscriber->close();
 			delete subscriber;
-			PostCallback(THISBACK1(processClientException, Format("%d - %s", errno, ex.what())));
+			tcp_msg.statement = TCPMessage::CLIENT_ERROR;
+			tcp_msg.content = Format("%d - %s", errno, ex.what());
+			PostCallback(THISBACK1(processClientException, tcp_msg));
 			return;
 		}
 		catch(String& ex)
@@ -135,7 +141,9 @@ void ZMQPubSubClient::clientLoop()
 			subscriber->close();
 			delete subscriber;
 			running = false;
-			PostCallback(THISBACK1(processClientException, ex));
+			tcp_msg.statement = TCPMessage::CLIENT_ABORT;
+			tcp_msg.content = ex;
+			PostCallback(THISBACK1(processClientException, tcp_msg));
 			return;
 		}
 	}

@@ -1,0 +1,12 @@
+description "basic TCP Message used by PubSubBroker, PubSubClient and PubSubServer\377";
+
+uses
+	Core;
+
+file
+	TCPMessage.cpp,
+	TCPMessage.h;
+
+mainconfig
+	"" = "MT";
+

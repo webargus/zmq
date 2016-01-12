@@ -14,6 +14,7 @@ class ZMQPubSubBroker
 	ZMQPubSubBroker(const String& srvport, const String& cltport);
 	void startBroker();
 	void stopBroker();
+	bool isRunning() { return running; }
 	void setBrokerPorts(const String& sp, const String& cp);
 	const String& getServerPort() { return srvport; }
 	const String& getClientPort() { return cltport; }

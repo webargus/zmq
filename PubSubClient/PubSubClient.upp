@@ -2,7 +2,8 @@ description "ZMQ PUB SUB Client\377";
 
 uses
 	Core,
-	PubSubServer;
+	PubSubServer,
+	TCPMessage;
 
 library
 	libzmq-v100-mt-4_0_4.lib;

@@ -2,6 +2,7 @@
 #define _PubSubClient_ZMQPubSubClient_h_
 
 #include <CtrlLib/CtrlLib.h>
+#include <TCPMessage/TCPMessage.h>
 #include "zmq.hpp"
 
 #define	REQUEST_TIMEOUT	3000		// depends on network latency
