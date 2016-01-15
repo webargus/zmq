@@ -25,7 +25,7 @@ class ZMQPubSubClient
 	const String& getServerName() { return server; }
 	const String& getPort() { return port; }
 
-	Callback1<String>					WhenMessage, WhenException, WhenWarning;
+	Callback1<String>				WhenMessage, WhenException, WhenWarning;
 
 	private:
 	void clientLoop();
