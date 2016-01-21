@@ -15,20 +15,21 @@ class ZMQPubSubServer
 	void sendMessage(const String msg);
 	void stopServer();
 	void processServerException(const String exc);
+	void processServerWarning(const String str);
 	void setServerParams(const String& srv, const String& sp);
 	void setLocalPort(const String& lp) { lclport = lp; }
 	const String& getServerPort() { return srvport; }
 	const String& getLocalPort()  { return lclport; }
 	const String& getServerName() { return server; }
 	
-	Callback1<String>			WhenException;
+	Callback1<String>			WhenException, WhenWarning;
 	private:
 	void publisherLoop();
 	
 	String						srvport, lclport, server;
 	zmq::context_t				context;
 	Thread						worker;
-	bool						running;
+	bool						running, wasException;
 };
 
 #endif

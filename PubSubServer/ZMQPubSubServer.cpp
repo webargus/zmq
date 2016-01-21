@@ -1,12 +1,13 @@
 #include "ZMQPubSubServer.h"
 
 ZMQPubSubServer::ZMQPubSubServer()
-	: server("localhost"), srvport("5559"), lclport("5555"), context(1), running(false)
+	: server("localhost"), srvport("5559"), lclport("5555"), context(1), running(false),
+	  wasException(false)
 {
 }
 
 ZMQPubSubServer::ZMQPubSubServer(const String& srv, const String& sp, const String& lp)
-	: server(srv), srvport(sp), lclport(lp), context(1), running(false)
+	: server(srv), srvport(sp), lclport(lp), context(1), running(false), wasException(false)
 {
 }
 
@@ -42,6 +43,10 @@ void ZMQPubSubServer::sendMessage(const String msg)
 		pusher.bind(String("tcp://*:").Cat() << lclport);
 		zmq::message_t message(msg.Begin(), msg.GetCount());
 		pusher.send(message);
+		if(wasException) {
+			wasException = false;
+			processServerWarning("servidor recuperou-se de exceção");
+		}
 	} catch (zmq::error_t ex) {
 		processServerException(Format("%d - %s", errno, ex.what()));
 	}
@@ -75,7 +80,13 @@ void ZMQPubSubServer::publisherLoop()
 
 void ZMQPubSubServer::processServerException(const String exc)
 {
+	wasException = true;
 	WhenException(exc);
+}
+
+void ZMQPubSubServer::processServerWarning(const String str)
+{
+	WhenWarning(str);
 }
 
 
